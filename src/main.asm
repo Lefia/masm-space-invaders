@@ -1,6 +1,7 @@
-INCLUDE /irvine/Irvine32.inc
+INCLUDE Irvine32.inc
+
 .data
-    myMessage db "Hello, Irvine32!", 0
+    myMessage db "Hello, Irvine32!!", 0
 
 .code
 main PROC

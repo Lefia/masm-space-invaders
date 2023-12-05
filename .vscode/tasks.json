@@ -7,7 +7,7 @@
             "command": "powershell",
             "args": [
                 "-File",
-                "${workspaceFolder}\\build.ps1"
+                "${workspaceFolder}\\tools\\scripts\\build.ps1 "
             ],
             "group": {
                 "kind": "build",
