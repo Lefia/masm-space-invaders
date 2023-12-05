@@ -5,8 +5,15 @@ $toolsPath  = "tools"
 $outputPath = "build"
 $inputPath  = "src"
 
+# If main.exe is running, then stop the process
+if (Get-Process -name main -ErrorAction SilentlyContinue) {
+    Stop-Process -name main -Force
+}
+
+# If the build folder does not exists, then create a new one
 New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
 
+# Compile asm files in src
 $errorFlag = $false
 Get-ChildItem -Path $inputPath -Filter *.asm | ForEach-Object {
     $outputFile = Join-Path $outputPath ($_.BaseName + ".obj")
@@ -22,12 +29,14 @@ if ($errorFlag -eq $true) {
     exit 1
 }
 
+# Get dependencies from text file
 $libPaths = @()
 foreach ($dependency in Get-Content $dependenciesFile) {
     $libPaths += Join-Path $masmPath\lib "$dependency.lib"
     
 }
 
+# Link obj files
 & "$toolsPath\bin\link.exe" `
     /SUBSYSTEM:CONSOLE `
     /NOLOGO `
