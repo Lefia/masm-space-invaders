@@ -17,7 +17,7 @@ New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
 $errorFlag = $false
 Get-ChildItem -Path $inputPath -Filter *.asm | ForEach-Object {
     $outputFile = Join-Path $outputPath ($_.BaseName + ".obj")
-    & "$toolsPath\bin\ml.exe" /c /coff /nologo /I"$masmPath\inc" /I"$irvinePath" /Fo $outputFile $_.FullName
+    & "$toolsPath\bin\ml.exe" /c /coff /nologo /I"$masmPath\include" /I"$irvinePath" /Fo $outputFile $_.FullName
 
     if ($LASTEXITCODE -ne 0) {
         $errorFlag = $true
@@ -52,4 +52,4 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Build Successful!" -ForegroundColor Green
 
-Start-Process "$outputPath\main.exe" 
+Start-Process wt -ArgumentList "--size 50,30 pwsh -Command chcp 437 && $outputPath\main.exe"
