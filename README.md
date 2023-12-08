@@ -1,3 +1,8 @@
+## Introduction
+This is the final project for NCU CSIE's Assembly Language and System Programming (CE2012*).
+
+## Start
+
 1. Clone this repository into your workspace.
 ```shell
 git clone https://github.com/Lefia/asm-final.git
@@ -22,3 +27,10 @@ git clone https://github.com/Lefia/asm-final.git
 ├── dependencies.txt
 └── README.md
 ```
+
+## Roadmap
+- [x] Make cannon movable
+- [ ] Fire the laser
+- [ ] Display the enemy
+- [ ] Collisions handling
+- [ ] Welcome screen
