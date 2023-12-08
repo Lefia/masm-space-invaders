@@ -5,5 +5,6 @@
             "icon": "terminal-powershell",
             "args": ["-ExecutionPolicy", "Bypass"]
         },
-    }
+    },
+    "editor.tabSize": 2
 }
