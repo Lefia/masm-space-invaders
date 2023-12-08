@@ -3,21 +3,28 @@ INCLUDE Macros.inc
 INCLUDE final.inc
 
 .data
-cannon BYTE ' ', 0DCh, ' '
-       BYTE 0DEh, 0DBh, 0DDh
-cannonSize DIM <3,2>
-cannonPos COORD <47,25>
-cannonPosNew COORD <21, 25>
 
 .code
 main PROC
-call Clrscr
-INVOKE print2D, ADDR cannon, cannonSize, cannonPos
-mov eax, 3000
-call Delay
-call Clrscr
-INVOKE print2D, ADDR cannon, cannonSize, cannonPosNew
+  call Clrscr
+  call showCannon
+Start:
+  mov eax, 100
+  call Delay
+  call ReadChar
+  .IF ax == LEFT_KEY
+    INVOKE moveCannon, LEFT
+  .ENDIF
+  .IF ax == RIGHT_KEY
+    INVOKE moveCannon, RIGHT
+  .ENDIF
+  .IF ax == 011Bh
+    jmp END_FUNC
+  .ENDIF
 
+  jmp Start
+END_FUNC:
+  exit
 main ENDP
 
 END main

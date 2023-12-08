@@ -50,8 +50,6 @@ move2D PROC USES eax esi ecx,
   
   ; Set Loop counter
   mov ecx, arraySize.h
-  mShow arraySize.h
-  mShow arraySize.w
 
   mov esi, OFFSET spaces 
 L1:
@@ -59,11 +57,10 @@ L1:
   INVOKE WriteConsoleOutputCharacter, 
     outputHandle,
     esi,
-    dim.w,
+    arraySize.w,
     oldPos,
     OFFSET count
   pop ecx
-  mShow ecx
   inc oldPos.Y
   loop L1
 

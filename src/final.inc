@@ -1,14 +1,24 @@
-;----------------------------------------------------
-; Description:
-;   The diemension of 2D array
-; Members:
-;   w  DWORD  Width of array
-;   h  DWORD  Height of array
-;----------------------------------------------------
+; Direction
+UP    EQU 0
+DOWN  EQU 1
+LEFT  EQU 2
+RIGHT EQU 3
+
+; Arrow key
+UP_KEY     EQU 4800h
+DOWN_KEY   EQU 5000h 
+LEFT_KEY   EQU 4B00h
+RIGHT_KEY  EQU 4D00h
+
+; Dimension of 2D array
 DIM STRUCT 
   w DWORD 0 ; Width
   h DWORD 0 ; Height
 DIM ENDS
+
+;****************
+;   utils.asm
+;****************
 
 ;----------------------------------------------------
 ; Description:
@@ -41,3 +51,29 @@ move2D PROTO,
   dim:DIM,        ; 
   oldPos:COORD,
   newPos:COORD
+
+
+;****************
+;   cannon.asm
+;****************
+
+;----------------------------------------------------
+; Description:
+;   Show cannon on console
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+showCannon PROTO
+
+;----------------------------------------------------
+; Description:
+;   Move cannon to the given direction
+; Input:
+;   Dir  DWORD  LEFT or RIGHT
+; Output:
+;   None
+;----------------------------------------------------
+moveCannon PROTO,
+  Dir: DWORD
