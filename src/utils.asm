@@ -67,5 +67,43 @@ L1:
   INVOKE print2D, array, arraySize, newPos
   ret
 move2D ENDP
+
+setPos PROC USES eax esi,
+  pos:PTR COORD,
+  x:WORD,
+  y:WORD
+
+  mov esi, pos
+  mov ax, x
+  mov (COORD PTR [esi]).x, ax
+  mov ax, y
+  mov (COORD PTR [esi]).y, ax
+  ret 
+setPos ENDP
+
+copyPos PROC USES eax esi,
+  pos1:PTR COORD,
+  pos2:COORD
+
+  mov esi, pos1
+  mov ax, pos2.x
+  mov (COORD PTR [esi]).x, ax
+  mov ax, pos2.y
+  mov (COORD PTR [esi]).y, ax
+  ret
+copyPos ENDP
+
+movePos PROC USES eax esi,
+  pos:PTR COORD,
+  x:WORD,
+  y:WORD
+
+  mov esi, pos
+  mov ax, x
+  add (COORD PTR [esi]).x, ax
+  mov ax, y
+  add (COORD PTR [esi]).y, ax
+  ret
+movePos ENDP
 END
 

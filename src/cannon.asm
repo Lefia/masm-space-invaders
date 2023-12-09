@@ -10,24 +10,15 @@ cannonCurrPos COORD <0,25>
 cannonPrevPos COORD <0,25>
 
 .code
-; Set previous position to current position
-setPrevPos PROC USES eax
-  mov ax, cannonCurrPos.x
-  mov cannonPrevPos.x, ax
-  mov ax, cannonCurrPos.y
-  mov cannonPrevPos.y, ax
-  ret
-setPrevPos ENDP
-
 ; Check if cannon out of bound
-checkBound PROC
+checkCannonBound PROC
   .IF cannonCurrPos.x == -1
     inc cannonCurrPos.x
   .ENDIF
   .IF cannonCurrPos.x == 44
     dec cannonCurrPos.x
   .ENDIF
-checkBound ENDP
+checkCannonBound ENDP
 
 ; Show cannon on current position
 showCannon PROC
@@ -44,16 +35,16 @@ moveCannon PROC,
 
   ; Move cannon
   .IF Dir == LEFT
-    call setPrevPos
+    INVOKE copyPos, ADDR cannonPrevPos, cannonCurrPos
     dec cannonCurrPos.x
   .ENDIF
   .IF Dir == RIGHT
-    call setPrevPos
+    INVOKE copyPos, ADDR cannonPrevPos, cannonCurrPos
     inc cannonCurrPos.x
   .ENDIF
   
   ; Check Bound
-  call checkBound
+  call checkCannonBound
 
   ; Move to next position
   INVOKE move2D, 
@@ -63,4 +54,13 @@ moveCannon PROC,
     cannonCurrPos
   ret
 moveCannon ENDP
+
+; Get cannon's current position
+getCannonPos PROC
+  mov ax, cannonCurrPos.x
+  mov dx, cannonCurrPos.y
+  ret
+getCannonPos ENDP
+
 END
+

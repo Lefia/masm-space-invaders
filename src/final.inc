@@ -9,6 +9,8 @@ UP_KEY     EQU 4800h
 DOWN_KEY   EQU 5000h 
 LEFT_KEY   EQU 4B00h
 RIGHT_KEY  EQU 4D00h
+SPACE_KEY  EQU 3920h
+ESC_KEY    EQU 011Bh
 
 ; Dimension of 2D array
 DIM STRUCT 
@@ -52,6 +54,48 @@ move2D PROTO,
   oldPos:COORD,
   newPos:COORD
 
+;----------------------------------------------------
+; Description:
+;   Set position with x and y
+; Input:
+;   pos  PTR COORD  Pointer to the position.
+;   x    WORD       X of position.
+;   y    WORD       Y of position
+; Output:
+;   None
+;----------------------------------------------------
+setPos PROTO,
+  pos:PTR COORD,
+  x:WORD,
+  y:WORD
+
+;----------------------------------------------------
+; Description:
+;   Copy position from pos2 to pos1
+; Input:
+;   pos1  PTR COORD  Pointer to the position.
+;   pos2  COORD      The position to copy.
+; Output:
+;   None
+;----------------------------------------------------
+copyPos PROTO,
+  pos1:PTR COORD,
+  pos2:COORD
+
+;----------------------------------------------------
+; Description:
+;   Add position with x and y
+; Input:
+;   pos  PTR COORD  Pointer to the position.
+;   x    WORD       Value X to add on pos.X.
+;   y    WORD       Value Y to add on pos.Y.
+; Output:
+;   None
+;----------------------------------------------------
+movePos PROTO,
+  pos:PTR COORD,
+  x:WORD,
+  y:WORD
 
 ;****************
 ;   cannon.asm
@@ -77,3 +121,35 @@ showCannon PROTO
 ;----------------------------------------------------
 moveCannon PROTO,
   Dir: DWORD
+
+;----------------------------------------------------
+; Description:
+;   Get Cannon's current position
+; Input:
+;   None
+; Output:
+;   ax: X of current position
+;   dx: Y of current position
+;----------------------------------------------------
+getCannonPos PROTO
+
+;----------------------------------------------------
+; Description:
+;   Set cannon's visibility
+; Input:
+;   bool  DWORD  Can be 0 (invisible) or 1 (visible)
+; Output:
+;   None
+;----------------------------------------------------
+setLaserVis PROTO,
+  bool: DWORD
+
+;----------------------------------------------------
+; Description:
+;   Print laser to console
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+showLaser PROTO
