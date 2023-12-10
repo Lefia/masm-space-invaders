@@ -65,6 +65,7 @@ End_Func:
   ret
 showLaser ENDP
 
+; Move laser up to the top
 moveLaser PROC
   INVOKE copyPos, ADDR laserPrevPos, laserCurrPos
   dec laserCurrPos.y
