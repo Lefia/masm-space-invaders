@@ -31,6 +31,11 @@ git clone https://github.com/Lefia/asm-final.git
 ## Roadmap
 - [x] Make cannon movable
 - [x] Fire the laser
-- [ ] Display the enemy
+- [x] Display the enemy
 - [ ] Collisions handling
+- [ ] Score board
+
+## TODO
+- [ ] More enemy type
+- [ ] Show victory and lose screen
 - [ ] Welcome screen
