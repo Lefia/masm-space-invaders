@@ -52,4 +52,4 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Build Successful!" -ForegroundColor Green
 
-Start-Process wt -ArgumentList "--size 50,30 pwsh -Command chcp 437 && $outputPath\main.exe"
+Start-Process wt -ArgumentList "--size 51,30 pwsh -Command chcp 437 && $outputPath\main.exe"
