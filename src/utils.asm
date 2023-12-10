@@ -12,7 +12,7 @@ spaces BYTE 50 DUP(' ')
 print2D PROC USES eax esi ecx,
   array:PTR BYTE,
   arraySize:DIM,
-  xyPos:COORD
+  pos:COORD
 
   ; Get outputhandle
   INVOKE GetStdHandle, STD_OUTPUT_HANDLE
@@ -29,11 +29,11 @@ L1:
     outputHandle,
     esi,
     arraySize.w,
-    xyPos,
+    pos,
     OFFSET count
   pop ecx
   add esi, arraySize.w
-  inc xyPos.Y
+  inc pos.Y
   loop L1
   ret
 print2D ENDP
