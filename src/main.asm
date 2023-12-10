@@ -2,12 +2,15 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
-.data
+.data 
+moveInvaderCounter DWORD 0
 
 .code
 main PROC
   call Clrscr
   call showCannon
+  call initInvader
+  
 Start:
   mov eax, 100
   call Delay
@@ -26,6 +29,14 @@ Start:
   .ENDIF
 
   call showLaser
+  call showInvader
+  .IF moveInvaderCounter == 4
+    call moveInvader
+    mov moveInvaderCounter, 0
+  .ENDIF
+
+  inc moveInvaderCounter
+  
   jmp Start
 END_FUNC:
   exit

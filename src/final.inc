@@ -34,8 +34,8 @@ DIM ENDS
 ;----------------------------------------------------
 print2D PROTO,
   array:PTR BYTE,
-  dim:DIM,
-  xyPos:COORD
+  siz:DIM,
+  pos:COORD
 
 ;----------------------------------------------------
 ; Description:
@@ -50,7 +50,7 @@ print2D PROTO,
 ;----------------------------------------------------
 move2D PROTO,
   array:PTR BYTE, ; The 2D array to print
-  dim:DIM,        ; 
+  siz:DIM,        ; 
   oldPos:COORD,
   newPos:COORD
 
@@ -111,7 +111,7 @@ movePos PROTO,
 ;----------------------------------------------------
 showCannon PROTO
 
-;----------------------------------------------------
+;---------------------------------------------------
 ; Description:
 ;   Move cannon to the given direction
 ; Input:
@@ -153,3 +153,33 @@ setLaserVis PROTO,
 ;   None
 ;----------------------------------------------------
 showLaser PROTO
+
+;----------------------------------------------------
+; Description:
+;   Initialize the property of each invader
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+initInvader PROTO
+
+;----------------------------------------------------
+; Description:
+;   Show all invaders
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+showInvader PROTO
+
+;----------------------------------------------------
+; Description:
+;   Move all invaders left and right
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+moveInvader PROTO
