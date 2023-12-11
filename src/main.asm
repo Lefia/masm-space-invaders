@@ -5,7 +5,7 @@ INCLUDE final.inc
 .code
 main PROC
   call Clrscr
-  call showCannon
+  call initCannon
   call initInvader
   
 Start:

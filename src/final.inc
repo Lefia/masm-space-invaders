@@ -103,13 +103,13 @@ movePos PROTO,
 
 ;----------------------------------------------------
 ; Description:
-;   Show cannon on console
+;   Initialize the cannon
 ; Input:
 ;   None
 ; Output:
 ;   None
 ;----------------------------------------------------
-showCannon PROTO
+initCannon PROTO
 
 ;---------------------------------------------------
 ; Description:

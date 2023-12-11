@@ -6,8 +6,8 @@ INCLUDE final.inc
 cannon BYTE ' ', ' ', ' ', 0DCh, ' ', ' ', ' '
        BYTE 0DEh, 0DCh, 0DBh, 0DBh, 0DBh, 0DCh, 0DDh
 cannonSize DIM <7,2>
-cannonCurrPos COORD <0,25>
-cannonPrevPos COORD <0,25>
+cannonCurrPos COORD <0,0>
+cannonPrevPos COORD <0,0>
 
 .code
 ; Check if cannon out of bound
@@ -18,16 +18,20 @@ checkCannonBound PROC
   .IF cannonCurrPos.x == 44
     dec cannonCurrPos.x
   .ENDIF
+  ret
 checkCannonBound ENDP
 
-; Show cannon on current position
-showCannon PROC
+; Initialize the cannon
+initCannon PROC
+  INVOKE setPos, ADDR cannonCurrPos, 23, 25
+  INVOKE setPos, ADDR cannonPrevPos, 23, 25
+
   INVOKE print2D, 
     ADDR cannon, 
     cannonSize, 
     cannonCurrPos
   ret
-showCannon ENDP
+initCannon ENDP
 
 ; Move cannon left or right
 moveCannon PROC,
