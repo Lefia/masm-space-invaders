@@ -133,6 +133,10 @@ moveCannon PROTO,
 ;----------------------------------------------------
 getCannonPos PROTO
 
+;****************
+;   laser.asm
+;****************
+
 ;----------------------------------------------------
 ; Description:
 ;   Set cannon's visibility
@@ -154,6 +158,10 @@ setLaserVis PROTO,
 ;----------------------------------------------------
 showLaser PROTO
 
+;****************
+;   invader.asm
+;****************
+
 ;----------------------------------------------------
 ; Description:
 ;   Initialize the property of each invader
@@ -173,13 +181,3 @@ initInvader PROTO
 ;   None
 ;----------------------------------------------------
 showInvader PROTO
-
-;----------------------------------------------------
-; Description:
-;   Move all invaders left and right
-; Input:
-;   None
-; Output:
-;   None
-;----------------------------------------------------
-moveInvader PROTO
