@@ -12,11 +12,24 @@ RIGHT_KEY  EQU 4D00h
 SPACE_KEY  EQU 3920h
 ESC_KEY    EQU 011Bh
 
+; Alias
+_invader TEXTEQU <[esi].INVADER>
+
 ; Dimension of 2D array
 DIM STRUCT 
-  w DWORD 0 ; Width
-  h DWORD 0 ; Height
+  w WORD 0 ; Width
+  h WORD 0 ; Height
 DIM ENDS
+
+; Invader object
+INVADER STRUCT
+  vis DWORD 0
+  prevPos COORD <0,0>
+  currPos COORD <0,0>
+  siz DIM <5,3>
+  var DWORD 0
+  status DWORD 0
+INVADER ENDS
 
 ;****************
 ;   utils.asm
@@ -53,6 +66,10 @@ move2D PROTO,
   siz:DIM,        ; 
   oldPos:COORD,
   newPos:COORD
+
+remove2D PROTO,
+  arraySize:DIM,
+  pos:COORD,
 
 ;----------------------------------------------------
 ; Description:
@@ -103,13 +120,13 @@ movePos PROTO,
 
 ;----------------------------------------------------
 ; Description:
-;   Show cannon on console
+;   Initialize the cannon
 ; Input:
 ;   None
 ; Output:
 ;   None
 ;----------------------------------------------------
-showCannon PROTO
+initCannon PROTO
 
 ;---------------------------------------------------
 ; Description:
@@ -128,10 +145,25 @@ moveCannon PROTO,
 ; Input:
 ;   None
 ; Output:
-;   ax: X of current position
-;   dx: Y of current position
+;   ax: X of cannon's current position
+;   dx: Y of cannon's current position
 ;----------------------------------------------------
 getCannonPos PROTO
+
+;----------------------------------------------------
+; Description:
+;   Get Cannon's size
+; Input:
+;   None
+; Output:
+;   eax: width of cannon
+;   edx: height of cannon
+;----------------------------------------------------
+getCannonSize PROTO
+
+;****************
+;   laser.asm
+;****************
 
 ;----------------------------------------------------
 ; Description:
@@ -144,6 +176,9 @@ getCannonPos PROTO
 setLaserVis PROTO,
   bool: DWORD
 
+setLaserFired PROTO,
+  bool:DWORD
+
 ;----------------------------------------------------
 ; Description:
 ;   Print laser to console
@@ -153,6 +188,21 @@ setLaserVis PROTO,
 ;   None
 ;----------------------------------------------------
 showLaser PROTO
+
+;----------------------------------------------------
+; Description:
+;   Get Laser's current position
+; Input:
+;   None
+; Output:
+;   ax: x of laser's current position
+;   dx: y of laser's current position
+;----------------------------------------------------
+getLaserPos PROTO
+
+;****************
+;   invader.asm
+;****************
 
 ;----------------------------------------------------
 ; Description:
@@ -174,12 +224,4 @@ initInvader PROTO
 ;----------------------------------------------------
 showInvader PROTO
 
-;----------------------------------------------------
-; Description:
-;   Move all invaders left and right
-; Input:
-;   None
-; Output:
-;   None
-;----------------------------------------------------
-moveInvader PROTO
+getInvaderList PROTO

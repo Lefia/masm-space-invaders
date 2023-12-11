@@ -2,13 +2,12 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
-.data 
-moveInvaderCounter DWORD 0
+checkInvaderCollision PROTO
 
 .code
 main PROC
   call Clrscr
-  call showCannon
+  call initCannon
   call initInvader
   
 Start:
@@ -25,20 +24,16 @@ Start:
     INVOKE setLaserVis, 1
   .ENDIF
   .IF ax == ESC_KEY
-    jmp END_FUNC
+    jmp End_Func
   .ENDIF
 
   call showLaser
   call showInvader
-  .IF moveInvaderCounter == 4
-    call moveInvader
-    mov moveInvaderCounter, 0
-  .ENDIF
 
-  inc moveInvaderCounter
+  call checkInvaderCollision
   
   jmp Start
-END_FUNC:
+End_Func:
   exit
 main ENDP
 
