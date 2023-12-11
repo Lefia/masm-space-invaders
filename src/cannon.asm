@@ -66,5 +66,10 @@ getCannonPos PROC
   ret
 getCannonPos ENDP
 
+; Get cannon's size
+getCannonSize PROC
+  mov ax, cannonSize.w
+  mov dx, cannonSize.h
+  ret
+getCannonSize ENDP
 END
-

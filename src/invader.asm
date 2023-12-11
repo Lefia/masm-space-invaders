@@ -2,17 +2,6 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
-INVADER STRUCT
-  vis DWORD 0
-  prevPos COORD <0,0>
-  currPos COORD <0,0>
-  siz DIM <5,3>
-  var DWORD 0
-  status DWORD 0
-INVADER ENDS
-
-_invader TEXTEQU <[esi].INVADER>
-
 .data 
 invader1_1 BYTE 0BFh,  5fh, 5fh,  5fh, 0DAh
            BYTE  2Fh, 0FEh, ' ', 0FEh,  5Ch
@@ -60,6 +49,9 @@ showInvader PROC USES esi edi ecx
   mov esi, OFFSET invaderList
   mov ecx, 10
 L1:
+  .IF _invader.vis == 0
+    jmp Continue
+  .ENDIF
   .IF _invader.var == 1
     .IF _invader.status == 1
       mov edi, OFFSET invader1_1 
@@ -70,6 +62,7 @@ L1:
     .ENDIF
   .ENDIF
   INVOKE move2D, edi, _invader.siz, _invader.prevPos, _invader.currPos
+Continue:
   add esi, TYPE INVADER
   loop L1
 
@@ -107,4 +100,9 @@ L1:
   .ENDIF
   ret
 moveInvader ENDP
+
+getInvaderList PROC
+  mov eax, OFFSET invaderList 
+  ret
+getInvaderList ENDP
 END

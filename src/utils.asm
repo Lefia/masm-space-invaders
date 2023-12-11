@@ -19,20 +19,22 @@ print2D PROC USES eax esi ecx,
   mov outputHandle, eax
   
   ; Set Loop counter
-  mov ecx, arraySize.h
+  movsx ecx, arraySize.h
   mov esi, array
 
   ; Write each row of 2D array
 L1:
   push ecx
+  movsx eax, arraySize.w
   INVOKE WriteConsoleOutputCharacter,
     outputHandle,
     esi,
-    arraySize.w,
+    eax,
     pos,
     OFFSET count
   pop ecx
-  add esi, arraySize.w
+  movsx eax, arraySize.w
+  add esi, eax
   inc pos.Y
   loop L1
   ret
@@ -49,15 +51,16 @@ move2D PROC USES eax esi ecx,
   mov outputHandle, eax
   
   ; Set Loop counter
-  mov ecx, arraySize.h
+  movsx ecx, arraySize.h
 
   mov esi, OFFSET spaces 
 L1:
   push ecx
+  movsx eax, arraySize.w
   INVOKE WriteConsoleOutputCharacter, 
     outputHandle,
     esi,
-    arraySize.w,
+    eax,
     oldPos,
     OFFSET count
   pop ecx
@@ -67,6 +70,32 @@ L1:
   INVOKE print2D, array, arraySize, newPos
   ret
 move2D ENDP
+
+remove2D PROC USES eax esi ecx,
+  arraySize:DIM,
+  pos:COORD,
+
+  ; Get outputhandle
+  INVOKE GetStdHandle, STD_OUTPUT_HANDLE
+  mov outputHandle, eax
+
+  ; Print white spaces to cosonle
+  mov esi, OFFSET spaces 
+  movsx ecx, arraySize.h
+L1:
+  push ecx
+  movsx eax, arraySize.w
+  INVOKE WriteConsoleOutputCharacter, 
+    outputHandle,
+    esi,
+    eax,
+    pos,
+    OFFSET count
+  pop ecx
+  inc pos.y
+  loop L1
+  ret
+remove2D ENDP
 
 setPos PROC USES eax esi,
   pos:PTR COORD,

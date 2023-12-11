@@ -12,6 +12,15 @@ laserVis DWORD 0
 laserFired DWORD 0
 
 .code
+; Set if laser is fired
+setLaserFired PROC USES eax,
+  bool: DWORD
+
+  mov eax, bool
+  mov laserFired, eax
+  ret
+setLaserFired ENDP
+
 ; Set the visibility of laser
 setLaserVis PROC USES eax,
   bool: DWORD
@@ -78,5 +87,11 @@ moveLaser PROC
     laserCurrPos
   ret
 moveLaser ENDP
+
+getLaserPos PROC
+  mov ax, laserCurrPos.x
+  mov dx, laserCurrPos.y
+  ret
+getLaserPos ENDP
 END
 
