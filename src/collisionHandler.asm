@@ -12,8 +12,9 @@ checkInvaderCollision PROC USES ecx esi
   LOCAL laserPos:COORD
 
   ; Set laserPos
-  call getLaserPos
-  INVOKE setPos, ADDR laserPos, ax, dx
+  call getLaserList
+  mov esi, eax
+  INVOKE setPos, ADDR laserPos, _laser.currPos.x, _laser.currPos.y
 
   call getInvaderList
   mov esi, eax ; Move invaderList into esi
@@ -56,9 +57,11 @@ L1:
 
   INVOKE remove2D, _invader.siz, _invader.currPos
   INVOKE remove2D, _invader.siz, _invader.prevPos
-  INVOKE setLaserVis, 0
-  INVOKE setLaserFired, 0
   mov _invader.vis, 0  
+
+  call getLaserList
+  INVOKE removeLaser, eax
+
   jmp End_Func
 Continue:
   add esi, TYPE INVADER

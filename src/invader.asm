@@ -78,12 +78,19 @@ moveInvader PROC
   mov esi, OFFSET invaderList
   mov ecx, 10  
 L1:
+  .IF _invader.vis == 0
+    jmp Continue
+  .ENDIF
+
   INVOKE copyPos, ADDR _invader.prevPos, _invader.currPos
+  
   .IF invaderDir == LEFT
     dec _invader.currPos.x
   .ELSEIF invaderDir == RIGHT
     inc _invader.currPos.x
   .ENDIF
+
+Continue:
   add esi, TYPE INVADER
   loop L1
 

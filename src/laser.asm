@@ -3,95 +3,121 @@ INCLUDE Macros.inc
 INCLUDE final.inc
 
 .data
-laser BYTE 0B3h
 laserSize DIM <1,1>
-laserPrevPos COORD <0,0>
-laserCurrPos COORD <0,0>
 
-laserVis DWORD 0
-laserFired DWORD 0
+laserList LASER 6 DUP(<>)
 
 .code
-; Set if laser is fired
-setLaserFired PROC USES eax,
-  bool: DWORD
+; Initialize laser owner
+initLaser PROC USES esi ecx
+  mov esi, OFFSET laserList
+  mov _laser.owner, 0
 
-  mov eax, bool
-  mov laserFired, eax
-  ret
-setLaserFired ENDP
-
-; Set the visibility of laser
-setLaserVis PROC USES eax,
-  bool: DWORD
-
-  mov eax, bool
-  mov laserVis, eax
-  ret
-setLaserVis ENDP
-
-; Check if out of bound
-checkLaserBound PROC
-  .IF laserCurrPos.y == -1
-    mov LaserVis, 0
-    mov laserFired, 0
-  .ENDIF
-  ret
-checkLaserBound ENDP
+  mov ecx, 6
+L1:
+  mov _laser.vis, 0
+ret
+initLaser ENDP
 
 ; Show laser on the console
-showLaser PROC USES eax
+showLaser PROC USES eax esi ecx
+  mov esi, OFFSET laserList
+  mov ecx, 6
+L1:
   ; If invisible then pass
-  .IF laserVis == 0
-    jmp End_Func
+  .IF _laser.vis == 0
+    jmp Continue
   .ENDIF
 
-  ; If is visible and not fired, then print laser upon the cannon
-  .IF laserFired == 0
-    call getCannonPos
-    INVOKE setPos, ADDR laserPrevPos, ax, dx
-    INVOKE movePos, ADDR laserPrevPos, 3, -1
-    INVOKE setPos, ADDR laserCurrPos, ax, dx
-    INVOKE movePos, ADDR laserCurrPos, 3, -1
-    mov laserFired, 1
-    jmp Print
-  .ENDIF
-
-  ; If is visible and fired, then jump to moveLaser
-  .IF laserFired == 1
-    call moveLaser
-    jmp End_Func
-  .ENDIF
-
-Print:
-  ; Print laser to console
-  INVOKE print2D, 
-    ADDR laser, 
+  INVOKE move2D, 
+    ADDR _laser.shape, 
     laserSize, 
-    laserCurrPos
-  ret
+    _laser.prevPos,
+    _laser.currPos
+
+Continue:
+  add esi, TYPE LASER
+  loop L1
 End_Func:
   ret
 showLaser ENDP
 
-; Move laser up to the top
-moveLaser PROC
-  INVOKE copyPos, ADDR laserPrevPos, laserCurrPos
-  dec laserCurrPos.y
-  call checkLaserBound
+moveLaser PROC USES eax esi ecx
+  mov esi, OFFSET laserList
+  mov ecx, 6
+L1:
+  .IF _laser.vis == 0
+    jmp Continue
+  .ENDIF
 
-  INVOKE move2D,
-    ADDR laser,
-    laserSize,
-    laserPrevPos,
-    laserCurrPos
+  INVOKE copyPos, ADDR _laser.prevPos, _laser.currPos
+  
+  ; Move laser
+  .IF _laser.owner == 0
+    ; Check if out of bound
+    .IF _laser.currPos.y == -1 
+      INVOKE removeLaser, esi
+      jmp Continue
+    .ENDIF
+
+    dec _laser.currPos.y
+  .ELSEIF _laser.owner == 1
+    .IF _laser.currPos.y == 30 
+      INVOKE remove2D, laserSize, _laser.currPos
+      mov _laser.vis, 0
+      jmp Continue
+    .ENDIF
+
+    inc _laser.currPos.y
+  .ENDIF
+
+
+Continue:
+  add esi, TYPE LASER
+  loop L1
+
   ret
 moveLaser ENDP
 
-getLaserPos PROC
-  mov ax, laserCurrPos.x
-  mov dx, laserCurrPos.y
+removeLaser PROC USES esi,
+  pLaser:PTR LASER
+
+  mov esi, pLaser
+  INVOKE remove2D, laserSize, _laser.currPos
+  INVOKE remove2D, laserSize, _laser.prevPos
+  mov _laser.vis, 0
   ret
-getLaserPos ENDP
+removeLaser ENDP
+
+; Return laserList
+getLaserList PROC
+  mov eax, OFFSET laserList 
+  ret
+getLaserList ENDP
+
+; Fire laser from cannon
+fireLaser PROC USES eax esi
+  LOCAL cannonPos:COORD
+
+  mov esi, OFFSET laserList
+
+  .IF _laser.vis == 1
+    jmp End_Func
+  .ENDIF
+
+  call getCannonPos
+  INVOKE setPos, ADDR cannonPos, ax, dx
+
+  INVOKE copyPos, ADDR _laser.prevPos, cannonPos
+  INVOKE movePos, ADDR _laser.prevPos, 3, -1
+  INVOKE copyPos, ADDR _laser.currPos, cannonPos
+  INVOKE movePos, ADDR _laser.currPos, 3, -1
+  
+  mov _laser.vis, 1
+
+End_Func:
+  ret
+fireLaser ENDP
+
 END
 

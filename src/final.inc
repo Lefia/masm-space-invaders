@@ -14,6 +14,7 @@ ESC_KEY    EQU 011Bh
 
 ; Alias
 _invader TEXTEQU <[esi].INVADER>
+_laser TEXTEQU <[esi].LASER>
 
 ; Dimension of 2D array
 DIM STRUCT 
@@ -30,6 +31,15 @@ INVADER STRUCT
   var DWORD 0
   status DWORD 0
 INVADER ENDS
+
+; Laser object
+LASER STRUCT
+  owner DWORD 1 ; 0 (Player) or 1 (Enemy)
+  shape BYTE 0B3h
+  vis DWORD 0 
+  prevPos COORD <0,0>
+  currPos COORD <0,0>
+LASER ENDS
 
 ;****************
 ;   utils.asm
@@ -165,19 +175,20 @@ getCannonSize PROTO
 ;   laser.asm
 ;****************
 
+initLaser PROTO
+
 ;----------------------------------------------------
 ; Description:
-;   Set cannon's visibility
+;   Move lasers
 ; Input:
-;   bool  DWORD  Can be 0 (invisible) or 1 (visible)
+;   None
 ; Output:
 ;   None
 ;----------------------------------------------------
-setLaserVis PROTO,
-  bool: DWORD
+moveLaser PROTO
 
-setLaserFired PROTO,
-  bool:DWORD
+removeLaser PROTO,
+  pLaser:PTR LASER
 
 ;----------------------------------------------------
 ; Description:
@@ -191,14 +202,23 @@ showLaser PROTO
 
 ;----------------------------------------------------
 ; Description:
-;   Get Laser's current position
+;   Get list of lasers
 ; Input:
 ;   None
 ; Output:
-;   ax: x of laser's current position
-;   dx: y of laser's current position
+;   eax: Pointer of laserList
 ;----------------------------------------------------
-getLaserPos PROTO
+getLaserList PROTO
+
+;----------------------------------------------------
+; Description:
+;   Fire laser from cannon
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+fireLaser PROTO
 
 ;****************
 ;   invader.asm
