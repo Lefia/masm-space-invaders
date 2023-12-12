@@ -30,6 +30,8 @@ Start:
   call showLaser
   call showInvader
 
+  call moveInvader
+
   call checkInvaderCollision
   
   jmp Start

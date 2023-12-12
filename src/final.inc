@@ -224,4 +224,6 @@ initInvader PROTO
 ;----------------------------------------------------
 showInvader PROTO
 
+moveInvader PROTO
+
 getInvaderList PROTO

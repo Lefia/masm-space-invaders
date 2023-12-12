@@ -65,21 +65,17 @@ L1:
 Continue:
   add esi, TYPE INVADER
   loop L1
-
-  .IF invaderTick == 4
-    call moveInvader
-    mov invaderTick, 0
-  .ENDIF
-  
-  inc invaderTick
   ret
 showInvader ENDP
 
 ; Move invaders left and right
 moveInvader PROC
-  mov esi, OFFSET invaderList
+  .IF invaderTick < 4
+    jmp End_Func
+  .ENDIF
 
   ; move each invader left or right by invaderDir(direction)
+  mov esi, OFFSET invaderList
   mov ecx, 10  
 L1:
   INVOKE copyPos, ADDR _invader.prevPos, _invader.currPos
@@ -98,6 +94,11 @@ L1:
   .ELSEIF _invader.currPos == 9
     mov invaderDir, LEFT
   .ENDIF
+
+  mov invaderTick, 0
+  
+End_Func: 
+  inc invaderTick
   ret
 moveInvader ENDP
 
