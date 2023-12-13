@@ -134,5 +134,38 @@ movePos PROC USES eax esi,
   add (COORD PTR [esi]).y, ax
   ret
 movePos ENDP
+
+; Get the remainder modulo divisor
+modulo PROC USES edx ebx,
+  dividend:DWORD,
+  divisor:DWORD
+
+  mov eax, dividend
+  mov ebx, divisor
+
+  mov edx, 0
+  div ebx
+  
+  ; return remainder
+  mov eax, edx
+  ret
+modulo ENDP
+
+; Get the element in array by index
+getByIndex PROC USES ecx esi,
+  array:PTR DWORD,
+  elementSize:DWORD,
+  index:DWORD
+
+  mov esi, array
+  mov eax, elementSize
+  mov ecx, index
+  mul ecx
+  add esi, eax
+  mov eax, esi
+
+  ret
+getByIndex ENDP
+
 END
 

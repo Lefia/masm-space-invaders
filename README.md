@@ -32,13 +32,14 @@ git clone https://github.com/Lefia/asm-final.git
 - [x] Make cannon movable
 - [x] Fire the laser
 - [x] Display the enemy
-- [ ] Attacks from enemy
+- [x] Attacks from enemy
 - [ ] Collisions handling
-  - [x] laser and enemy
-  - [ ]  player and enemy's laser
+  - [x] Laser and enemy
+  - [ ] Player and enemy's laser
 - [ ] Score board
 
 ## TODO
-- [ ] More enemy type
+- [ ] More enemies and more enemy types
+- [ ] Give player more life
 - [ ] Show victory and lose screen
 - [ ] Welcome screen

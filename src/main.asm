@@ -2,14 +2,12 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
-checkInvaderCollision PROTO
-
 .code
 main PROC
   call Clrscr
   call initCannon
   call initInvader
-  
+  call initLaser
 Start:
   mov eax, 100
   call Delay
@@ -21,7 +19,7 @@ Start:
     INVOKE moveCannon, RIGHT
   .ENDIF
   .IF ax == SPACE_KEY
-    INVOKE setLaserVis, 1
+    call fireLaser
   .ENDIF
   .IF ax == ESC_KEY
     jmp End_Func
@@ -30,8 +28,11 @@ Start:
   call showLaser
   call showInvader
 
+  call moveLaser
+  call moveInvader
+
   call checkInvaderCollision
-  
+  call invaderFireLaser
   jmp Start
 End_Func:
   exit
