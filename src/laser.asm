@@ -16,7 +16,7 @@ initLaser PROC USES esi ecx
   mov ecx, 6
 L1:
   mov _laser.vis, 0
-ret
+  ret
 initLaser ENDP
 
 ; Show laser on the console
@@ -63,8 +63,7 @@ L1:
     dec _laser.currPos.y
   .ELSEIF _laser.owner == 1
     .IF _laser.currPos.y == 30 
-      INVOKE remove2D, laserSize, _laser.currPos
-      mov _laser.vis, 0
+      INVOKE removeLaser, esi
       jmp Continue
     .ENDIF
 

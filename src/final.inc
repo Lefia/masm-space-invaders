@@ -15,6 +15,7 @@ ESC_KEY    EQU 011Bh
 ; Alias
 _invader TEXTEQU <[esi].INVADER>
 _laser TEXTEQU <[esi].LASER>
+__laser TEXTEQU <[edi].LASER>
 
 ; Dimension of 2D array
 DIM STRUCT 
@@ -124,6 +125,15 @@ movePos PROTO,
   x:WORD,
   y:WORD
 
+modulo PROTO,
+  dividend:DWORD,
+  divisor:DWORD
+
+getByIndex PROTO,
+  array:PTR DWORD,
+  elementSize:DWORD,
+  index:DWORD
+
 ;****************
 ;   cannon.asm
 ;****************
@@ -187,6 +197,14 @@ initLaser PROTO
 ;----------------------------------------------------
 moveLaser PROTO
 
+;----------------------------------------------------
+; Description:
+;   Remove laser by the position
+; Input:
+;   pLaser  PTR LASER  Pointer to the laser
+; Output:
+;   None
+;----------------------------------------------------
 removeLaser PROTO,
   pLaser:PTR LASER
 
@@ -244,6 +262,53 @@ initInvader PROTO
 ;----------------------------------------------------
 showInvader PROTO
 
+;----------------------------------------------------
+; Description:
+;   Move invaders left and right
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
 moveInvader PROTO
 
+;----------------------------------------------------
+; Description:
+;   Get the invaderList array
+; Input:
+;   None
+; Output:
+;   eax: Pointer to the invaderList
+;----------------------------------------------------
 getInvaderList PROTO
+
+;----------------------------------------------------
+; Description:
+;   Get the invaderColSum array
+; Input:
+;   None
+; Output:
+;   eax: Pointer to the invaderColSum
+;----------------------------------------------------
+getInvaderColSum PROTO
+
+;----------------------------------------------------
+; Description:
+;   Fire laser from invaders
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+invaderFireLaser PROTO
+
+;----------------------------------------------------
+; Description:
+;   Check the collision between player's laser and
+;   invaders
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+checkInvaderCollision PROTO

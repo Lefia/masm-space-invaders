@@ -2,15 +2,12 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
-checkInvaderCollision PROTO
-
 .code
 main PROC
   call Clrscr
   call initCannon
   call initInvader
   call initLaser
-  
 Start:
   mov eax, 100
   call Delay
@@ -35,7 +32,7 @@ Start:
   call moveInvader
 
   call checkInvaderCollision
-  
+  call invaderFireLaser
   jmp Start
 End_Func:
   exit
