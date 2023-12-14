@@ -10,7 +10,8 @@ git clone https://github.com/Lefia/asm-final.git
 
 2. Download the dependencies from [Here](https://drive.google.com/file/d/1rP-3o9Z4owrDwjXpgbMOdl_axcWxiuKI/view?usp=sharing)
 3. Unzip the dependencies into project folder.
-4. To compile the project in Visual Studio Code, use the keyboard shortcut `Ctrl + Shift + B`.
+4. Ensure that the windows terminal(wt.exe) and powershell(pwsh.exe) are installed
+5. To compile the project in Visual Studio Code, use the keyboard shortcut `Ctrl + Shift + B`.
 ```
 // Project folder structre
 .
@@ -33,9 +34,9 @@ git clone https://github.com/Lefia/asm-final.git
 - [x] Fire the laser
 - [x] Display the enemy
 - [x] Attacks from enemy
-- [ ] Collisions handling
+- [x] Collisions handling
   - [x] Laser and enemy
-  - [ ] Player and enemy's laser
+  - [x] Player and enemy's laser
 - [ ] Score board
 
 ## TODO
