@@ -83,7 +83,7 @@ Continue:
 showInvader ENDP
 
 ; Move invaders left and right
-moveInvader PROC USES esi ecx
+moveInvader PROC USES eax esi ecx
   .IF invaderTick < 4
     jmp End_Func
   .ENDIF
@@ -107,9 +107,9 @@ moveInvader PROC USES esi ecx
   ; If out of the bound, then change the direction
   mov esi, OFFSET invaderList
 
-  .IF _invader.currPos <= 1
+  .IF _invader.currPos == 1
     mov invaderDir, RIGHT
-  .ELSEIF _invader.currPos >= 9
+  .ELSEIF _invader.currPos == 9
     mov invaderDir, LEFT
   .ENDIF
 

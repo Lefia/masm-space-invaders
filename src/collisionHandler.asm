@@ -87,4 +87,68 @@ checkInvaderCollision PROC USES eax ebx ecx esi
 End_Func:
   ret
 checkInvaderCollision ENDP
+
+checkCannonCollision PROC USES eax esi ecx
+  LOCAL cannonPos:COORD
+  LOCAL cannonSize:DIM
+
+  
+  call getCannonPos
+  mov cannonPos.x, ax
+  mov cannonPos.y, dx
+
+  call getCannonSize
+  mov cannonSize.w, ax
+  mov cannonSize.h, dx
+
+  INVOKE setPos, ADDR rectTopLeft, cannonPos.x, cannonPos.y
+
+  mov ax, cannonPos.x
+  add ax, cannonSize.w
+  sub ax, 1
+  mov rectBottomRight.x, ax
+
+  mov ax, cannonPos.y
+  add ax, cannonSize.h
+  sub ax, 1
+  mov rectBottomRight.y, ax
+
+  call getLaserList
+  mov esi, eax
+
+  mov ecx, -1
+  .REPEAT
+    inc ecx
+    add esi, TYPE LASER
+
+    .IF _laser.vis == 0
+      .CONTINUE
+    .ENDIF
+
+    mov ax, rectBottomRight.x
+    .IF _laser.currPos.x > ax
+      .CONTINUE
+    .ENDIF
+    mov ax, rectTopLeft.x
+    .IF _laser.currPos.x < ax
+      .CONTINUE
+    .ENDIF
+
+    mov ax, rectBottomRight.y
+    .IF _laser.currPos.y > ax
+      .CONTINUE
+    .ENDIF
+    mov ax, rectTopLeft.y
+    .IF _laser.currPos.y < ax
+      .CONTINUE
+    .ENDIF
+
+    ; ; If true, then remove the player
+    ; INVOKE remove2D, cannonSize, cannonPos
+
+    mov _laser.vis, 0
+
+  .UNTIL ecx >=4
+  ret
+checkCannonCollision ENDP
 END

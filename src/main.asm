@@ -2,6 +2,8 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
+checkCannonCollision PROTO
+
 .code
 main PROC
   call Clrscr
@@ -32,6 +34,7 @@ Start:
   call moveInvader
 
   call checkInvaderCollision
+  call checkCannonCollision
   call invaderFireLaser
   jmp Start
 End_Func:
