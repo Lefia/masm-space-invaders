@@ -37,10 +37,12 @@ git clone https://github.com/Lefia/asm-final.git
 - [x] Collisions handling
   - [x] Laser and enemy
   - [x] Player and enemy's laser
-- [ ] Score board
+- [x] Score board
+- [ ] Victory and lose screen
+- [ ] Welcome screen
 
 ## TODO
 - [ ] More enemies and more enemy types
 - [ ] Give player more life
-- [ ] Show victory and lose screen
-- [ ] Welcome screen
+- [ ] Display a firework when enemy die 
+- [ ] Pause and restart the game
