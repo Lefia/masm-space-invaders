@@ -83,6 +83,9 @@ checkInvaderCollision PROC USES eax ebx ecx esi
     INVOKE getByIndex, eax, TYPE DWORD, ebx
     sub DWORD PTR [eax], 1
 
+    ; Add score
+    INVOKE addScore
+
   .UNTIL ecx >= 9 ; From index 0 to 9
 End_Func:
   ret
@@ -143,10 +146,7 @@ checkCannonCollision PROC USES eax esi ecx
       .CONTINUE
     .ENDIF
 
-    ; ; If true, then remove the player
-    ; INVOKE remove2D, cannonSize, cannonPos
-
-    mov _laser.vis, 0
+    INVOKE removeLaser, esi
 
   .UNTIL ecx >=4
   ret

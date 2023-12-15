@@ -46,6 +46,11 @@ LASER ENDS
 ;   utils.asm
 ;****************
 
+printLine PROTO,
+  array:PTR BYTE,
+  len:DWORD,
+  pos:COORD
+
 ;----------------------------------------------------
 ; Description:
 ;   Print 2D array to console
@@ -312,3 +317,13 @@ invaderFireLaser PROTO
 ;   None
 ;----------------------------------------------------
 checkInvaderCollision PROTO
+
+;****************
+;   score.asm
+;****************
+
+initScore PROTO
+
+addScore PROTO
+
+showScore PROTO

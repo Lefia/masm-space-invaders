@@ -7,6 +7,8 @@ checkCannonCollision PROTO
 .code
 main PROC
   call Clrscr
+
+  call initScore
   call initCannon
   call initInvader
   call initLaser
@@ -29,6 +31,7 @@ Start:
 
   call showLaser
   call showInvader
+  call showScore
 
   call moveLaser
   call moveInvader

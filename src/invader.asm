@@ -27,7 +27,7 @@ initInvader PROC USES eax esi ecx
   LOCAL pos:COORD
 
   ; Initialize the property and position of each invader
-  INVOKE setPos, ADDR pos, 5, 0
+  INVOKE setPos, ADDR pos, 5, 2
   mov esi, OFFSET invaderList
   mov ecx, 0
   .WHILE ecx < 10 
@@ -55,6 +55,9 @@ initInvader PROC USES eax esi ecx
     add esi, TYPE DWORD
     dec ecx
   .ENDW
+
+  mov invaderTick, 0
+  
   ret
 initInvader ENDP
 
@@ -107,9 +110,9 @@ moveInvader PROC USES eax esi ecx
   ; If out of the bound, then change the direction
   mov esi, OFFSET invaderList
 
-  .IF _invader.currPos == 1
+  .IF _invader.currPos.x == 1
     mov invaderDir, RIGHT
-  .ELSEIF _invader.currPos == 9
+  .ELSEIF _invader.currPos.x == 9
     mov invaderDir, LEFT
   .ENDIF
 
