@@ -327,3 +327,5 @@ initScore PROTO
 addScore PROTO
 
 showScore PROTO
+
+showWelcomeScreen PROTO

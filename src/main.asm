@@ -8,39 +8,49 @@ checkCannonCollision PROTO
 main PROC
   call Clrscr
 
+  .WHILE 1
+    mov eax, 100
+    call Delay
+    call ReadKey
+    .IF ax == SPACE_KEY
+      .BREAK
+    .ENDIF
+    call showWelcomeScreen
+  .ENDW
+
+  call Clrscr
   call initScore
   call initCannon
   call initInvader
   call initLaser
-Start:
-  mov eax, 100
-  call Delay
-  call ReadKey
-  .IF ax == LEFT_KEY
-    INVOKE moveCannon, LEFT
-  .ENDIF
-  .IF ax == RIGHT_KEY
-    INVOKE moveCannon, RIGHT
-  .ENDIF
-  .IF ax == SPACE_KEY
-    call fireLaser
-  .ENDIF
-  .IF ax == ESC_KEY
-    jmp End_Func
-  .ENDIF
+  .WHILE 1
+    mov eax, 100
+    call Delay
+    call ReadKey
+    .IF ax == LEFT_KEY
+      INVOKE moveCannon, LEFT
+    .ENDIF
+    .IF ax == RIGHT_KEY
+      INVOKE moveCannon, RIGHT
+    .ENDIF
+    .IF ax == SPACE_KEY
+      call fireLaser
+    .ENDIF
+    .IF ax == ESC_KEY
+      .BREAK
+    .ENDIF
 
-  call showLaser
-  call showInvader
-  call showScore
+    call showLaser
+    call showInvader
+    call showScore
 
-  call moveLaser
-  call moveInvader
+    call moveLaser
+    call moveInvader
 
-  call checkInvaderCollision
-  call checkCannonCollision
-  call invaderFireLaser
-  jmp Start
-End_Func:
+    call checkInvaderCollision
+    call checkCannonCollision
+    call invaderFireLaser
+  .ENDW
   exit
 main ENDP
 
