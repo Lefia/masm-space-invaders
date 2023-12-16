@@ -35,9 +35,9 @@ main PROC
       call fireLaser
     .ENDIF
     .IF ax == ESC_KEY
+      call showGameOverScreen
       .BREAK
     .ENDIF
-
     call showLaser
     call showInvader
     call showScore
@@ -62,9 +62,13 @@ main PROC
       .BREAK
     .ENDIF
   .ENDW
+
   .WHILE 1
     mov eax, 100
     call Delay
+    .IF ax == ESC_KEY
+      .BREAK
+    .ENDIF
   .ENDW
   exit
 main ENDP

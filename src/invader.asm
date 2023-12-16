@@ -171,24 +171,22 @@ invaderFireLaser PROC USES eax edx ecx esi edi
   .ENDW
 
   ; Find how many columns enemy are alive
-  mov eax, -1
+  mov eax, 0
   mov esi, OFFSET invaderColSum
   mov ecx, 5
   .WHILE ecx > 0
     .IF (DWORD PTR [esi]) > 0
       inc eax
     .ENDIF
+    add esi, TYPE DWORD
     dec ecx
   .ENDW
 
   ; Get random number in range 0 - eax
-  .IF eax == -1
+  .IF eax == 0
     jmp End_Func ; No invader exists
-  .ELSEIF eax == 0
-    mov ranNum, 0
   .ELSE
     call Randomize
-    mov  eax, 5
     call RandomRange
     mov ranNum, eax
   .ENDIF
@@ -198,12 +196,15 @@ invaderFireLaser PROC USES eax edx ecx esi edi
   mov edi, OFFSET invaderColSum
 
   ; Choose which invader to fire
-  .WHILE ranNum > 0
-    add esi, TYPE INVADER
-    add edi, TYPE DWORD
+  .WHILE 1
     .IF (DWORD PTR [edi]) > 0
       dec ranNum
     .ENDIF
+    .IF ranNum == -1
+      .BREAK
+    .ENDIF
+    add esi, TYPE INVADER
+    add edi, TYPE DWORD
   .ENDW
   mov pInvader, esi
 
