@@ -1,0 +1,27 @@
+{
+	"If ... ": {
+		"prefix": "if",
+		"body": [
+			".IF $0",
+			".ENDIF"
+		],
+		"description": "If ... "
+	},
+	"While ...": {
+		"prefix": "while",
+		"body": [
+			".WHILE $0",
+			".ENDW"
+		],
+		"description": "While"
+	},
+	"Repeat ... Until": {
+		"prefix": "repeat",
+		"body": [
+			".REPEAT",
+			"\t",
+			".UNTIL $0"
+		],
+		"description": "While"
+	}
+}

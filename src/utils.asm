@@ -9,6 +9,24 @@ count DWORD 0
 spaces BYTE 50 DUP(' ')
 
 .code
+printLine PROC USES eax esi ecx,
+  array:PTR BYTE,
+  len:DWORD,
+  pos:COORD
+
+  ; Get outputhandle
+  INVOKE GetStdHandle, STD_OUTPUT_HANDLE
+  mov outputHandle, eax
+  
+  INVOKE WriteConsoleOutputCharacter,
+    outputHandle,
+    array,
+    len,
+    pos,
+    OFFSET count
+  ret
+printLine ENDP
+
 print2D PROC USES eax esi ecx,
   array:PTR BYTE,
   arraySize:DIM,

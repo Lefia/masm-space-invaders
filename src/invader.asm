@@ -17,6 +17,7 @@ invader1_2 BYTE 0BFh,   5fh, 5fh,  5fh, 0DAh
 
 invaderList INVADER INVADER_SIZE DUP(<>)
 invaderColSum DWORD INVADER_SIZE_COL DUP(INVADER_SIZE_ROW)
+invaderCount DWORD INVADER_SIZE
 invaderDir DWORD LEFT
 invaderTick DWORD 0
 invaderFireTick DWORD 0
@@ -27,7 +28,7 @@ initInvader PROC USES eax esi ecx
   LOCAL pos:COORD
 
   ; Initialize the property and position of each invader
-  INVOKE setPos, ADDR pos, 5, 0
+  INVOKE setPos, ADDR pos, 5, 2
   mov esi, OFFSET invaderList
   mov ecx, 0
   .WHILE ecx < 10 
@@ -55,6 +56,10 @@ initInvader PROC USES eax esi ecx
     add esi, TYPE DWORD
     dec ecx
   .ENDW
+
+  mov invaderTick, 0
+  mov invaderCount, INVADER_SIZE
+  
   ret
 initInvader ENDP
 
@@ -83,7 +88,7 @@ Continue:
 showInvader ENDP
 
 ; Move invaders left and right
-moveInvader PROC USES esi ecx
+moveInvader PROC USES eax esi ecx
   .IF invaderTick < 4
     jmp End_Func
   .ENDIF
@@ -107,9 +112,9 @@ moveInvader PROC USES esi ecx
   ; If out of the bound, then change the direction
   mov esi, OFFSET invaderList
 
-  .IF _invader.currPos <= 1
+  .IF _invader.currPos.x == 1
     mov invaderDir, RIGHT
-  .ELSEIF _invader.currPos >= 9
+  .ELSEIF _invader.currPos.x == 9
     mov invaderDir, LEFT
   .ENDIF
 
@@ -132,6 +137,19 @@ getInvaderColSum PROC
   ret
 getInvaderColSum ENDP
 
+; Return the number of invaders
+getInvaderCount PROC
+  mov eax, invaderCount
+  ret
+getInvaderCount ENDP
+
+setInvaderCount PROC USES eax,
+  count:DWORD
+  mov eax, count
+  mov invaderCount, eax
+  ret
+setInvaderCount ENDP
+
 ; Fire laser from invaders
 invaderFireLaser PROC USES eax edx ecx esi edi
   LOCAL ranNum:DWORD
@@ -153,24 +171,22 @@ invaderFireLaser PROC USES eax edx ecx esi edi
   .ENDW
 
   ; Find how many columns enemy are alive
-  mov eax, -1
+  mov eax, 0
   mov esi, OFFSET invaderColSum
   mov ecx, 5
   .WHILE ecx > 0
     .IF (DWORD PTR [esi]) > 0
       inc eax
     .ENDIF
+    add esi, TYPE DWORD
     dec ecx
   .ENDW
 
   ; Get random number in range 0 - eax
-  .IF eax == -1
+  .IF eax == 0
     jmp End_Func ; No invader exists
-  .ELSEIF eax == 0
-    mov ranNum, 0
   .ELSE
     call Randomize
-    mov  eax, 5
     call RandomRange
     mov ranNum, eax
   .ENDIF
@@ -180,12 +196,15 @@ invaderFireLaser PROC USES eax edx ecx esi edi
   mov edi, OFFSET invaderColSum
 
   ; Choose which invader to fire
-  .WHILE ranNum > 0
-    add esi, TYPE INVADER
-    add edi, TYPE DWORD
+  .WHILE 1
     .IF (DWORD PTR [edi]) > 0
       dec ranNum
     .ENDIF
+    .IF ranNum == -1
+      .BREAK
+    .ENDIF
+    add esi, TYPE INVADER
+    add edi, TYPE DWORD
   .ENDW
   mov pInvader, esi
 
