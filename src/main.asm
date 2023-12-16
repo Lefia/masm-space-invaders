@@ -2,8 +2,6 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
-checkCannonCollision PROTO
-
 .code
 main PROC
   call Clrscr
@@ -43,6 +41,7 @@ main PROC
     call showLaser
     call showInvader
     call showScore
+    call showPlayerHP
 
     call moveLaser
     call moveInvader
@@ -50,6 +49,22 @@ main PROC
     call checkInvaderCollision
     call checkCannonCollision
     call invaderFireLaser
+
+    call getPlayerHP
+    .IF eax == 0
+      call showGameOverScreen
+      .BREAK
+    .ENDIF
+
+    call getInvaderCount
+    .IF eax == 0
+      call showVictoryScreen
+      .BREAK
+    .ENDIF
+  .ENDW
+  .WHILE 1
+    mov eax, 100
+    call Delay
   .ENDW
   exit
 main ENDP

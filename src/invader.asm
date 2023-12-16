@@ -17,6 +17,7 @@ invader1_2 BYTE 0BFh,   5fh, 5fh,  5fh, 0DAh
 
 invaderList INVADER INVADER_SIZE DUP(<>)
 invaderColSum DWORD INVADER_SIZE_COL DUP(INVADER_SIZE_ROW)
+invaderCount DWORD INVADER_SIZE
 invaderDir DWORD LEFT
 invaderTick DWORD 0
 invaderFireTick DWORD 0
@@ -57,6 +58,7 @@ initInvader PROC USES eax esi ecx
   .ENDW
 
   mov invaderTick, 0
+  mov invaderCount, INVADER_SIZE
   
   ret
 initInvader ENDP
@@ -134,6 +136,19 @@ getInvaderColSum PROC
   mov eax, OFFSET invaderColSum
   ret
 getInvaderColSum ENDP
+
+; Return the number of invaders
+getInvaderCount PROC
+  mov eax, invaderCount
+  ret
+getInvaderCount ENDP
+
+setInvaderCount PROC USES eax,
+  count:DWORD
+  mov eax, count
+  mov invaderCount, eax
+  ret
+setInvaderCount ENDP
 
 ; Fire laser from invaders
 invaderFireLaser PROC USES eax edx ecx esi edi

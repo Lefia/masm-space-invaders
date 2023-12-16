@@ -307,6 +307,15 @@ getInvaderColSum PROTO
 ;----------------------------------------------------
 invaderFireLaser PROTO
 
+getInvaderCount PROTO
+
+setInvaderCount PROTO,
+  count:DWORD
+
+;*************************
+;   collisionHandler.asm
+;*************************
+
 ;----------------------------------------------------
 ; Description:
 ;   Check the collision between player's laser and
@@ -317,6 +326,17 @@ invaderFireLaser PROTO
 ;   None
 ;----------------------------------------------------
 checkInvaderCollision PROTO
+
+;----------------------------------------------------
+; Description:
+;   Check the collision between invader's laser
+;   and player
+; Input:
+;   None
+; Output:
+;   None
+;----------------------------------------------------
+checkCannonCollision PROTO
 
 ;****************
 ;   score.asm
@@ -329,3 +349,20 @@ addScore PROTO
 showScore PROTO
 
 showWelcomeScreen PROTO
+
+showVictoryScreen PROTO
+
+showGameOverScreen PROTO
+
+;****************
+;   player.asm
+;****************
+
+initPlayer PROTO
+
+showPlayerHP PROTO
+
+getPlayerHP PROTO
+
+setPlayerHP PROTO,
+  hp:DWORD

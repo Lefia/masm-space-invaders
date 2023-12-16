@@ -83,6 +83,11 @@ checkInvaderCollision PROC USES eax ebx ecx esi
     INVOKE getByIndex, eax, TYPE DWORD, ebx
     sub DWORD PTR [eax], 1
 
+    ; Decrease the invaderCount (The number of invaders)
+    INVOKE getInvaderCount
+    dec eax
+    INVOKE setInvaderCount, eax
+
     ; Add score
     INVOKE addScore
 
@@ -147,6 +152,10 @@ checkCannonCollision PROC USES eax esi ecx
     .ENDIF
 
     INVOKE removeLaser, esi
+
+    call getPlayerHP
+    dec eax
+    INVOKE setPlayerHP, eax
 
   .UNTIL ecx >=4
   ret
