@@ -38,11 +38,12 @@ git clone https://github.com/Lefia/asm-final.git
   - [x] Laser and enemy
   - [x] Player and enemy's laser
 - [x] Score board
-- [ ] Victory and lose screen
-- [ ] Welcome screen
-
-## TODO
-- [ ] More enemies and more enemy types
-- [ ] Give player more life
+- [x] Victory and lose screen
+- [x] Welcome screen
+- [x] Give player more life
 - [ ] Display a firework when enemy die 
 - [ ] Pause and restart the game
+- [ ] More enemies and more enemy types
+
+## TODO
+- [ ] Make enemy move forward the cannon
