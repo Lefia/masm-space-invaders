@@ -7,9 +7,9 @@ welcomeFrameTop     BYTE  0C9h, 46 DUP(0CDh), 0BBh
 welcomeFrameSide    BYTE  0BAh, 46 DUP(' '), 0BAh
 welcomeFrameBottom  BYTE  0C8h, 46 DUP(0CDh), 0BCh
 
-endFrameTop     BYTE  0DAh, 40 DUP(0C4h), 0BFh
-endFrameSide    BYTE  0B3h, 40 DUP(' '), 0B3h
-endFrameBottom  BYTE  0C0h, 40 DUP(0C4h), 0D9h
+frameTop     BYTE  0DAh, 40 DUP(0C4h), 0BFh
+frameSide    BYTE  0B3h, 40 DUP(' '), 0B3h
+frameBottom  BYTE  0C0h, 40 DUP(0C4h), 0D9h
 
 spaceText BYTE 20h, 20h, 20h, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h
           BYTE 20h, 20h, 2Fh, 20h, 5Fh, 5Fh, 5Fh, 2Fh, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 20h, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 20h
@@ -46,9 +46,25 @@ overText BYTE 20h, 20h, 20h, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 20h, 20h, 20h, 20h, 20h, 2
          BYTE 2Fh, 20h, 2Fh, 5Fh, 2Fh, 20h, 2Fh, 7Ch, 20h, 7Ch, 2Fh, 20h, 2Fh, 20h, 20h, 5Fh, 5Fh, 2Fh, 20h, 2Fh, 20h, 20h, 20h, 20h 
          BYTE 5Ch, 5Fh, 5Fh, 5Fh, 5Fh, 2Fh, 20h, 7Ch, 5Fh, 5Fh, 5Fh, 2Fh, 5Ch, 5Fh, 5Fh, 5Fh, 2Fh, 5Fh, 2Fh, 20h, 20h, 20h, 20h, 20h 
 
-dividerText BYTE 42 DUP('-')
+restartButton BYTE 0DAh,9 DUP(0C4h), 0BFh
+              BYTE 0B3h, 20h, "restart", 20h, 0B3h
+              BYTE 0C0h, 9 DUP(0C4h), 0D9h
 
+activeRestartButton BYTE 0C9h,9 DUP(0CDh), 0BBh
+                    BYTE 0BAh, 20h, "restart", 20h, 0BAh
+                    BYTE 0C8h, 9 DUP(0CDh), 0BCh
+
+exitButton BYTE 0DAh,6 DUP(0C4h), 0BFh
+              BYTE 0B3h, 20h, "exit", 20h, 0B3h
+              BYTE 0C0h, 6 DUP(0C4h), 0D9h
+
+activeExitButton BYTE 0C9h,6 DUP(0CDh), 0BBh
+                    BYTE 0BAh, 20h, "exit", 20h, 0BAh
+                    BYTE 0C8h, 6 DUP(0CDh), 0BCh
+
+dividerText BYTE 42 DUP('-')
 startText BYTE "Press <Space> to start"
+continueText BYTE "Continue...?"
 
 spaceTextSize DIM <29,6>
 invadersTextSize DIM <45,5>
@@ -56,6 +72,8 @@ cannonTextSize DIM <7,2>
 victoryTextSize DIM <35,6>
 gameTextSize DIM <28,5>
 overTextSize DIM <24,5>
+restartButtonSize DIM <11,3>
+exitButtonSize DIM <8,3>
 
 startTextStatus DWORD 1
 welcomeTick DWORD 0
@@ -111,17 +129,7 @@ showWelcomeScreen ENDP
 showVictoryScreen PROC USES ecx
   LOCAL pos:COORD
 
-  ; Print the frame
-  INVOKE setPos, ADDR pos, 7,2
-  INVOKE printLine, ADDR endFrameTop, LENGTHOF endFrameTop, pos
-  mov ecx, 20
-  .WHILE ecx > 0
-    inc pos.y
-    INVOKE printLine, ADDR endFrameSide, LENGTHOF endFrameSide, pos
-    dec ecx
-  .ENDW
-  inc pos.y
-  INVOKE printLine, ADDR endFrameBottom, LENGTHOF endFrameBottom, pos
+  call printFrame
 
   INVOKE setPos, ADDR pos, 10, 8
   INVOKE print2D, ADDR victoryText, victoryTextSize, pos
@@ -132,17 +140,7 @@ showVictoryScreen ENDP
 showGameOverScreen PROC USES ecx
   LOCAL pos:COORD
 
-  ; Print the frame
-  INVOKE setPos, ADDR pos, 7,2
-  INVOKE printLine, ADDR endFrameTop, LENGTHOF endFrameTop, pos
-  mov ecx, 20
-  .WHILE ecx > 0
-    inc pos.y
-    INVOKE printLine, ADDR endFrameSide, LENGTHOF endFrameSide, pos
-    dec ecx
-  .ENDW
-  inc pos.y
-  INVOKE printLine, ADDR endFrameBottom, LENGTHOF endFrameBottom, pos
+  call printFrame
 
   INVOKE setPos, ADDR pos, 9, 4
   INVOKE print2D, ADDR gameText, gameTextSize, pos
@@ -152,4 +150,62 @@ showGameOverScreen PROC USES ecx
 
   ret
 showGameOverScreen ENDP
+
+printFrame PROC
+  LOCAL pos:COORD
+
+  ; Print the frame
+  INVOKE setPos, ADDR pos, 6,2
+  INVOKE printLine, ADDR frameTop, LENGTHOF frameTop, pos
+  mov ecx, 20
+  .WHILE ecx > 0
+    inc pos.y
+    INVOKE printLine, ADDR frameSide, LENGTHOF frameSide, pos
+    dec ecx
+  .ENDW
+  inc pos.y
+  INVOKE printLine, ADDR frameBottom, LENGTHOF frameBottom, pos
+  ret
+printFrame ENDP
+
+showOptions PROC
+  LOCAL pos:COORD
+  LOCAL op:DWORD
+  mov op, 2
+  
+  call printFrame
+
+  .WHILE 1
+    mov eax, 100
+    call Delay
+    call ReadKey
+
+    .IF ax == UP_KEY
+      mov op, 2
+    .ENDIF
+    .IF ax == DOWN_KEY
+      mov op, 0
+    .ENDIF
+    .IF ax == SPACE_KEY || ax == ENTER_KEY
+      INVOKE setGameStatus, op
+      .BREAK
+    .ENDIF
+    
+    INVOKE setPos, ADDR pos, 22, 8
+    INVOKE printLine, ADDR continueText, LENGTHOF continueText, pos
+    .IF op == 2
+      INVOKE setPos, ADDR pos, 22, 13
+      INVOKE print2D, ADDR activeRestartButton, restartButtonSize, pos
+      INVOKE setPos, ADDR pos, 23, 17
+      INVOKE print2D, ADDR exitButton, exitButtonSize, pos
+    .ELSEIF op == 0
+      INVOKE setPos, ADDR pos, 22, 13
+      INVOKE print2D, ADDR restartButton, restartButtonSize, pos
+      INVOKE setPos, ADDR pos, 23, 17
+      INVOKE print2D, ADDR activeExitButton, exitButtonSize, pos
+    .ENDIF
+  .ENDW
+  
+  ret
+showOptions ENDP
 END

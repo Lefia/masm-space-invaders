@@ -14,8 +14,11 @@ initLaser PROC USES esi ecx
   mov _laser.owner, 0
 
   mov ecx, 6
-L1:
-  mov _laser.vis, 0
+  .WHILE ecx > 0
+    mov _laser.vis, 0
+    add esi, TYPE LASER
+    dec ecx
+  .ENDW
   ret
 initLaser ENDP
 

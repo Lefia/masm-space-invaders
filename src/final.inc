@@ -11,6 +11,7 @@ LEFT_KEY   EQU 4B00h
 RIGHT_KEY  EQU 4D00h
 SPACE_KEY  EQU 3920h
 ESC_KEY    EQU 011Bh
+ENTER_KEY  EQU 1C0Dh
 
 ; Alias
 _invader TEXTEQU <[esi].INVADER>
@@ -42,6 +43,9 @@ LASER STRUCT
   prevPos COORD <0,0>
   currPos COORD <0,0>
 LASER ENDS
+
+setGameStatus PROTO,
+  status:DWORD
 
 ;****************
 ;   utils.asm
@@ -361,6 +365,8 @@ showWelcomeScreen PROTO
 showVictoryScreen PROTO
 
 showGameOverScreen PROTO
+
+showOptions PROTO
 
 ;****************
 ;   player.asm

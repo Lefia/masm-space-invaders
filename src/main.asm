@@ -2,28 +2,50 @@ INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 INCLUDE final.inc
 
+.data
+gameStatus DWORD 0
+gameResult DWORD 0
+
 .code
 main PROC
   call Clrscr
 
-  .WHILE 1
+  mov gameStatus, 0
+  mov gameResult, 0
+
+  .WHILE gameStatus != 1
     mov eax, 100
     call Delay
     call ReadKey
     .IF ax == SPACE_KEY
-      .BREAK
+      mov gameStatus, 1
     .ENDIF
     call showWelcomeScreen
   .ENDW
 
+Start:
   call Clrscr
   call initScore
   call initCannon
   call initInvader
   call initLaser
-  .WHILE 1
+  .WHILE gameStatus == 1
     mov eax, 100
     call Delay
+
+    call showCannon
+    call showLaser
+    call showInvader
+    call showScore
+    call showPlayerHP
+
+    call moveLaser
+    call moveInvader
+
+    call checkInvaderCollision
+    call checkCannonCollision
+    call invaderFireLaser
+
     call ReadKey
     .IF ax == LEFT_KEY
       INVOKE moveCannon, LEFT
@@ -35,34 +57,32 @@ main PROC
       call fireLaser
     .ENDIF
     .IF ax == ESC_KEY
-      call showGameOverScreen
-      .BREAK
+      call showOptions
     .ENDIF
-    call showCannon
-    call showLaser
-    call showInvader
-    call showScore
-    call showPlayerHP
 
     call getPlayerHP
     .IF eax == 0
-      call showGameOverScreen
-      .BREAK
+      mov gameResult, 0
+      mov gameStatus, 0
     .ENDIF
 
     call getInvaderCount
     .IF eax == 0
-      call showVictoryScreen
-      .BREAK
+      mov gameResult, 1
+      mov gameStatus, 0
     .ENDIF
-
-    call moveLaser
-    call moveInvader
-
-    call checkInvaderCollision
-    call checkCannonCollision
-    call invaderFireLaser
   .ENDW
+
+  .IF gameStatus == 2
+    mov gameStatus, 1
+    jmp Start
+  .ELSEIF gameStatus == 0
+    .IF gameResult == 0
+      call showGameOverScreen
+    .ELSEIF gameResult == 1
+      call showVictoryScreen
+    .ENDIF
+  .ENDIF
 
   .WHILE 1
     mov eax, 100
@@ -74,5 +94,12 @@ main PROC
   .ENDW
   exit
 main ENDP
+
+setGameStatus PROC USES eax,
+  status:DWORD
+  mov eax, status
+  mov gameStatus, eax 
+  ret
+setGameStatus ENDP
 
 END main
