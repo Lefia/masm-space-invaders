@@ -30,7 +30,8 @@ INVADER STRUCT
   currPos COORD <0,0>
   siz DIM <5,3>
   var DWORD 0
-  status DWORD 0
+  status DWORD 1
+  explode DWORD 0
 INVADER ENDS
 
 ; Laser object
