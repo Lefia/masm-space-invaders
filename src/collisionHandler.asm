@@ -158,6 +158,10 @@ checkCannonCollision PROC USES eax esi ecx
     dec eax
     INVOKE setPlayerHP, eax
 
+    call getCannonStatus
+    inc eax
+    INVOKE setCannonStatus, eax
+
   .UNTIL ecx >=4
   ret
 checkCannonCollision ENDP

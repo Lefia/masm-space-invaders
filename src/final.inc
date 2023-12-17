@@ -187,6 +187,13 @@ getCannonPos PROTO
 ;----------------------------------------------------
 getCannonSize PROTO
 
+showCannon PROTO
+
+getCannonStatus PROTO
+
+setCannonStatus PROTO,
+  status:DWORD
+
 ;****************
 ;   laser.asm
 ;****************

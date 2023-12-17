@@ -38,17 +38,11 @@ main PROC
       call showGameOverScreen
       .BREAK
     .ENDIF
+    call showCannon
     call showLaser
     call showInvader
     call showScore
     call showPlayerHP
-
-    call moveLaser
-    call moveInvader
-
-    call checkInvaderCollision
-    call checkCannonCollision
-    call invaderFireLaser
 
     call getPlayerHP
     .IF eax == 0
@@ -61,11 +55,19 @@ main PROC
       call showVictoryScreen
       .BREAK
     .ENDIF
+
+    call moveLaser
+    call moveInvader
+
+    call checkInvaderCollision
+    call checkCannonCollision
+    call invaderFireLaser
   .ENDW
 
   .WHILE 1
     mov eax, 100
     call Delay
+    call ReadKey
     .IF ax == ESC_KEY
       .BREAK
     .ENDIF
