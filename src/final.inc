@@ -358,7 +358,8 @@ initScore PROTO
 
 addScore PROTO
 
-showScore PROTO
+showScore PROTO,
+  pos:COORD
 
 showWelcomeScreen PROTO
 

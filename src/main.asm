@@ -5,6 +5,7 @@ INCLUDE final.inc
 .data
 gameStatus DWORD 0
 gameResult DWORD 0
+scorePos COORD <3,0>
 
 .code
 main PROC
@@ -36,8 +37,6 @@ Start:
     call showCannon
     call showLaser
     call showInvader
-    call showScore
-    call showPlayerHP
 
     call moveLaser
     call moveInvader
@@ -71,6 +70,9 @@ Start:
       mov gameResult, 1
       mov gameStatus, 0
     .ENDIF
+
+    INVOKE showScore, scorePos
+    call showPlayerHP
   .ENDW
 
   .IF gameStatus == 2

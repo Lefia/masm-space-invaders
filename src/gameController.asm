@@ -134,6 +134,9 @@ showVictoryScreen PROC USES ecx
   INVOKE setPos, ADDR pos, 10, 8
   INVOKE print2D, ADDR victoryText, victoryTextSize, pos
 
+  INVOKE setPos, ADDR pos, 22, 19
+  INVOKE showScore, pos
+
   ret
 showVictoryScreen ENDP
 
@@ -147,6 +150,9 @@ showGameOverScreen PROC USES ecx
 
   INVOKE setPos, ADDR pos, 21, 9
   INVOKE print2D, ADDR overText, overTextSize, pos
+
+  INVOKE setPos, ADDR pos, 22, 19
+  INVOKE showScore, pos
 
   ret
 showGameOverScreen ENDP
