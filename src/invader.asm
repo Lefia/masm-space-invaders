@@ -24,6 +24,7 @@ invaderColSum DWORD INVADER_SIZE_COL DUP(INVADER_SIZE_ROW)
 invaderCount DWORD INVADER_SIZE
 invaderDir DWORD LEFT
 invaderTick DWORD 0
+invaderMoveForwardTick DWORD 0
 invaderExplodeTick DWORD 0
 invaderFireTick DWORD 0
 
@@ -64,6 +65,8 @@ initInvader PROC USES eax esi ecx
   .ENDW
 
   mov invaderTick, 0
+  mov invaderFireTick, 0
+  mov invaderMoveForwardTick, 0
   mov invaderCount, INVADER_SIZE
   
   ret
@@ -110,7 +113,7 @@ showInvader ENDP
 ; Move invaders left and right
 moveInvader PROC USES eax esi ecx
   .IF invaderTick < 4
-    jmp End_Func
+    jmp Move_Forward
   .ENDIF
 
   ; move each invader left or right by invaderDir(direction)
@@ -139,8 +142,31 @@ moveInvader PROC USES eax esi ecx
   .ENDIF
 
   mov invaderTick, 0
-  
+
+Move_Forward:
+  .IF invaderMoveForwardTick < 60
+    jmp End_Func
+  .ENDIF
+
+  mov ecx, -1  
+  .REPEAT
+    inc ecx
+    INVOKE getByIndex, ADDR invaderList, TYPE INVADER, ecx
+    mov esi, eax
+    
+    inc _invader.currPos.y
+  .UNTIL ecx >= 9
+
+  mov esi, OFFSET invaderList
+
+  .IF _invader.currPos.y == 15
+    dec _invader.currPos.y
+  .ENDIF
+
+  mov invaderMoveForwardTick, 0
+
 End_Func: 
+  inc invaderMoveForwardTick
   inc invaderTick
   ret
 moveInvader ENDP
