@@ -2,6 +2,19 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "dev",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-File",
+                "${workspaceFolder}\\tools\\scripts\\dev.ps1 "
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "build",
             "type": "shell",
             "command": "powershell",
@@ -9,10 +22,6 @@
                 "-File",
                 "${workspaceFolder}\\tools\\scripts\\build.ps1 "
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
         }
     ]
 }

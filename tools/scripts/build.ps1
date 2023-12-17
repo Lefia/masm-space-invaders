@@ -5,11 +5,6 @@ $toolsPath  = "tools"
 $outputPath = "build"
 $inputPath  = "src"
 
-# If main.exe is running, then stop the process
-if (Get-Process -name main -ErrorAction SilentlyContinue) {
-    Stop-Process -name main -Force
-}
-
 # If the build folder does not exists, then create a new one
 New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
 
@@ -50,6 +45,10 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Build Successful!" -ForegroundColor Green
+Get-ChildItem -Path $outputPath -Filter *.obj | ForEach-Object { 
+    Remove-Item $_.FullName -Force 
+}
 
-Start-Process wt -ArgumentList "--size 51,30 pwsh -Command chcp 437 && $outputPath\main.exe"
+Copy-Item -Path "$PSScriptRoot/run.bat" -Destination "$outputPath" -Force
+
+Write-Host "Build Successful!" -ForegroundColor Green
