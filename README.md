@@ -41,9 +41,9 @@ git clone https://github.com/Lefia/asm-final.git
 - [x] Victory and lose screen
 - [x] Welcome screen
 - [x] Give player more life
-- [ ] Display a firework when enemy die 
-- [ ] Pause and restart the game
-- [ ] More enemies and more enemy types
+- [x] Display a firework when enemy and player die 
+- [x] Make enemy move forward the cannon
+- [x] Pause and restart the game
 
-## TODO
-- [ ] Make enemy move forward the cannon
+## Future Plan
+- [ ] Add more enemies and more enemy types

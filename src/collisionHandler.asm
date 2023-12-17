@@ -70,7 +70,8 @@ checkInvaderCollision PROC USES eax ebx ecx esi
     ; If true, then remove the invader
     INVOKE remove2D, _invader.siz, _invader.currPos
     INVOKE remove2D, _invader.siz, _invader.prevPos
-    mov _invader.vis, 0  
+    ;mov _invader.vis, 0  
+    mov _invader.status, 0
 
     ; Remove the laser
     call getLaserList
@@ -156,6 +157,10 @@ checkCannonCollision PROC USES eax esi ecx
     call getPlayerHP
     dec eax
     INVOKE setPlayerHP, eax
+
+    call getCannonStatus
+    inc eax
+    INVOKE setCannonStatus, eax
 
   .UNTIL ecx >=4
   ret

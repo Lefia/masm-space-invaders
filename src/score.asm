@@ -25,9 +25,10 @@ addScore PROC USES eax
   ret
 addScore ENDP
 
-showScore PROC USES eax ecx ebx edx esi
+showScore PROC USES eax ecx ebx edx esi,
+  pos:COORD
+
   LOCAL tmp:DWORD
-  LOCAL pos:COORD
   LOCAL len:DWORD
   
   mov eax, score
@@ -60,7 +61,6 @@ showScore PROC USES eax ecx ebx edx esi
     .ENDIF
   .ENDW
 
-  INVOKE setPos, ADDR pos, 3, 0
   INVOKE printLine, ADDR scoreText, LENGTHOF scoreText, pos
   INVOKE movePos, ADDR pos, LENGTHOF scoreText, 0
   .IF len == 0

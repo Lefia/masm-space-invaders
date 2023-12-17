@@ -15,11 +15,17 @@ invader1_2 BYTE 0BFh,   5fh, 5fh,  5fh, 0DAh
            BYTE  2Fh,  0FEh, ' ', 0FEh,  5Ch
            BYTE  0D9h, 0C0h, ' ', 0D9h, 0C0h
 
+invaderExplode BYTE 5Ch, 20h, 7Ch, 20h, 2Fh 
+               BYTE 2Dh, 2Dh, 2Ah, 2Dh, 2Dh 
+               BYTE 2Fh, 20h, 7Ch, 20h, 5Ch 
+
 invaderList INVADER INVADER_SIZE DUP(<>)
 invaderColSum DWORD INVADER_SIZE_COL DUP(INVADER_SIZE_ROW)
 invaderCount DWORD INVADER_SIZE
 invaderDir DWORD LEFT
 invaderTick DWORD 0
+invaderMoveForwardTick DWORD 0
+invaderExplodeTick DWORD 0
 invaderFireTick DWORD 0
 
 .code
@@ -35,6 +41,7 @@ initInvader PROC USES eax esi ecx
     mov _invader.vis, 1
     mov _invader.var, 1
     mov _invader.status, 1
+    mov _invader.explode, 0
     INVOKE setPos, ADDR _invader.prevPos, pos.x, pos.y
     INVOKE setPos, ADDR _invader.currPos, pos.x, pos.y
 
@@ -58,6 +65,8 @@ initInvader PROC USES eax esi ecx
   .ENDW
 
   mov invaderTick, 0
+  mov invaderFireTick, 0
+  mov invaderMoveForwardTick, 0
   mov invaderCount, INVADER_SIZE
   
   ret
@@ -66,31 +75,45 @@ initInvader ENDP
 showInvader PROC USES esi edi ecx
   ; Print each invader
   mov esi, OFFSET invaderList
-  mov ecx, 10
-L1:
-  .IF _invader.vis == 0
-    jmp Continue
-  .ENDIF
-  .IF _invader.var == 1
-    .IF _invader.status == 1
+  mov ecx, -1
+  .REPEAT
+    inc ecx
+    INVOKE getByIndex, ADDR invaderList, TYPE INVADER, ecx
+    mov esi, eax
+    .IF _invader.vis == 0
+      .CONTINUE
+    .ENDIF
+    .IF _invader.var == 1 && _invader.status == 1
       mov edi, OFFSET invader1_1 
       mov _invader.status, 2 
-    .ELSEIF _invader.status == 2
+    .ELSEIF _invader.var == 1 && _invader.status == 2
       mov edi, OFFSET invader1_2 
       mov _invader.status, 1
     .ENDIF
-  .ENDIF
-  INVOKE move2D, edi, _invader.siz, _invader.prevPos, _invader.currPos
-Continue:
-  add esi, TYPE INVADER
-  loop L1
+    .IF _invader.status == 0
+      mov edi, OFFSET invaderExplode
+      .IF _invader.explode == 0
+        mov _invader.explode, 1
+        mov invaderExplodeTick, -1
+      .ENDIF
+      add invaderExplodeTick, 1
+      .IF invaderExplodeTick == 3
+        mov _invader.vis, 0
+        INVOKE remove2D, _invader.siz, _invader.currPos
+        INVOKE remove2D, _invader.siz, _invader.prevPos
+        mov invaderExplodeTick, 0
+       .CONTINUE
+      .ENDIF
+    .ENDIF
+    INVOKE move2D, edi, _invader.siz, _invader.prevPos, _invader.currPos
+  .UNTIL ecx >= 9
   ret
 showInvader ENDP
 
 ; Move invaders left and right
 moveInvader PROC USES eax esi ecx
   .IF invaderTick < 4
-    jmp End_Func
+    jmp Move_Forward
   .ENDIF
 
   ; move each invader left or right by invaderDir(direction)
@@ -119,8 +142,31 @@ moveInvader PROC USES eax esi ecx
   .ENDIF
 
   mov invaderTick, 0
-  
+
+Move_Forward:
+  .IF invaderMoveForwardTick < 60
+    jmp End_Func
+  .ENDIF
+
+  mov ecx, -1  
+  .REPEAT
+    inc ecx
+    INVOKE getByIndex, ADDR invaderList, TYPE INVADER, ecx
+    mov esi, eax
+    
+    inc _invader.currPos.y
+  .UNTIL ecx >= 9
+
+  mov esi, OFFSET invaderList
+
+  .IF _invader.currPos.y == 15
+    dec _invader.currPos.y
+  .ENDIF
+
+  mov invaderMoveForwardTick, 0
+
 End_Func: 
+  inc invaderMoveForwardTick
   inc invaderTick
   ret
 moveInvader ENDP
@@ -155,7 +201,7 @@ invaderFireLaser PROC USES eax edx ecx esi edi
   LOCAL ranNum:DWORD
   LOCAL pInvader:DWORD
 
-  .IF invaderFireTick < 30
+  .IF invaderFireTick < 20
     jmp End_Func
   .ENDIF
 

@@ -11,6 +11,7 @@ LEFT_KEY   EQU 4B00h
 RIGHT_KEY  EQU 4D00h
 SPACE_KEY  EQU 3920h
 ESC_KEY    EQU 011Bh
+ENTER_KEY  EQU 1C0Dh
 
 ; Alias
 _invader TEXTEQU <[esi].INVADER>
@@ -30,7 +31,8 @@ INVADER STRUCT
   currPos COORD <0,0>
   siz DIM <5,3>
   var DWORD 0
-  status DWORD 0
+  status DWORD 1
+  explode DWORD 0
 INVADER ENDS
 
 ; Laser object
@@ -41,6 +43,9 @@ LASER STRUCT
   prevPos COORD <0,0>
   currPos COORD <0,0>
 LASER ENDS
+
+setGameStatus PROTO,
+  status:DWORD
 
 ;****************
 ;   utils.asm
@@ -185,6 +190,13 @@ getCannonPos PROTO
 ;   edx: height of cannon
 ;----------------------------------------------------
 getCannonSize PROTO
+
+showCannon PROTO
+
+getCannonStatus PROTO
+
+setCannonStatus PROTO,
+  status:DWORD
 
 ;****************
 ;   laser.asm
@@ -346,13 +358,16 @@ initScore PROTO
 
 addScore PROTO
 
-showScore PROTO
+showScore PROTO,
+  pos:COORD
 
 showWelcomeScreen PROTO
 
 showVictoryScreen PROTO
 
 showGameOverScreen PROTO
+
+showOptions PROTO
 
 ;****************
 ;   player.asm
