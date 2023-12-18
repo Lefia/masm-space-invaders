@@ -196,6 +196,11 @@ showOptions PROC
       INVOKE setGameStatus, op
       .BREAK
     .ENDIF
+    .IF ax == ESC_KEY
+      INVOKE setGameStatus, 1
+      call Clrscr
+      .BREAK
+    .ENDIF
     
     INVOKE setPos, ADDR pos, 22, 8
     INVOKE printLine, ADDR continueText, LENGTHOF continueText, pos
