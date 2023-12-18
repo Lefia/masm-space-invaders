@@ -18,7 +18,7 @@ main PROC
     mov eax, 100
     call Delay
     call ReadKey
-    .IF ax == SPACE_KEY
+    .IF ax == SPACE_KEY || ax == ENTER_KEY
       mov gameStatus, 1
     .ENDIF
     call showWelcomeScreen
