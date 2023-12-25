@@ -24,8 +24,16 @@ invadersText BYTE 20h, 20h, 20h, 20h, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 20h, 20h, 20h, 20
             BYTE 20h, 5Fh, 2Fh, 20h, 2Fh, 2Fh, 20h, 2Fh, 20h, 2Fh, 20h, 2Fh, 20h, 7Ch, 2Fh, 20h, 2Fh, 20h, 2Fh, 5Fh, 2Fh, 20h, 2Fh, 20h, 2Fh, 5Fh, 2Fh, 20h, 2Fh, 20h, 20h, 5Fh, 5Fh, 2Fh, 20h, 2Fh, 20h, 20h, 28h, 5Fh, 5Fh, 20h, 20h, 29h, 20h 
             BYTE 2Fh, 5Fh, 5Fh, 5Fh, 2Fh, 5Fh, 2Fh, 20h, 2Fh, 5Fh, 2Fh, 7Ch, 5Fh, 5Fh, 5Fh, 2Fh, 5Ch, 5Fh, 5Fh, 2Ch, 5Fh, 2Fh, 5Ch, 5Fh, 5Fh, 2Ch, 5Fh, 2Fh, 5Ch, 5Fh, 5Fh, 5Fh, 2Fh, 5Fh, 2Fh, 20h, 20h, 2Fh, 5Fh, 5Fh, 5Fh, 5Fh, 2Fh, 20h, 20h 
 
-cannonText BYTE  20h,  20h,  20h, 0DCh,  20h,  20h,  20h
+cannonImg BYTE  20h,  20h,  20h, 0DCh,  20h,  20h,  20h
            BYTE 0DEh, 0DCh, 0DBh, 0DBh, 0DBh, 0DCh, 0DDh
+
+invaderImg_1 BYTE 0BFh,  5fh, 5fh,  5fh, 0DAh
+             BYTE  2Fh, 0FEh, ' ', 0FEh,  5Ch
+             BYTE  7Ch, 0C0h, ' ', 0D9h,  7Ch
+
+invaderImg_2 BYTE 0BFh,   5fh, 5fh,  5fh, 0DAh
+             BYTE  2Fh,  0FEh, ' ', 0FEh,  5Ch
+             BYTE  0D9h, 0C0h, ' ', 0D9h, 0C0h
 
 victoryText BYTE 20h, 5Fh, 20h, 20h, 20h, 20h, 5Fh, 5Fh, 5Fh, 20h, 20h, 20h, 20h, 20h, 20h, 5Fh, 5Fh, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h 
             BYTE 7Ch, 20h, 7Ch, 20h, 20h, 2Fh, 20h, 28h, 5Fh, 29h, 5Fh, 5Fh, 5Fh, 5Fh, 2Fh, 20h, 2Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 20h, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 20h, 20h, 5Fh, 5Fh 
@@ -54,13 +62,13 @@ activeRestartButton BYTE 0C9h,9 DUP(0CDh), 0BBh
                     BYTE 0BAh, 20h, "restart", 20h, 0BAh
                     BYTE 0C8h, 9 DUP(0CDh), 0BCh
 
-exitButton BYTE 0DAh,6 DUP(0C4h), 0BFh
-              BYTE 0B3h, 20h, "exit", 20h, 0B3h
-              BYTE 0C0h, 6 DUP(0C4h), 0D9h
+exitButton BYTE 0DAh ,7 DUP(0C4h), 0BFh
+           BYTE 0B3h, " exit  ", 0B3h
+           BYTE 0C0h, 7 DUP(0C4h), 0D9h
 
-activeExitButton BYTE 0C9h,6 DUP(0CDh), 0BBh
-                    BYTE 0BAh, 20h, "exit", 20h, 0BAh
-                    BYTE 0C8h, 6 DUP(0CDh), 0BCh
+activeExitButton BYTE 0C9h, 7 DUP(0CDh), 0BBh
+                 BYTE 0BAh, " exit  ", 0BAh
+                 BYTE 0C8h, 7 DUP(0CDh), 0BCh
 
 dividerText BYTE 42 DUP('-')
 startText BYTE "Press <Space> to start"
@@ -68,15 +76,17 @@ continueText BYTE "Continue...?"
 
 spaceTextSize DIM <29,6>
 invadersTextSize DIM <45,5>
-cannonTextSize DIM <7,2>
+cannonImgSize DIM <7,2>
+invaderImgSize DIM <5,3>
 victoryTextSize DIM <35,6>
 gameTextSize DIM <28,5>
 overTextSize DIM <24,5>
 restartButtonSize DIM <11,3>
-exitButtonSize DIM <8,3>
+exitButtonSize DIM <9,3>
 
 startTextStatus DWORD 1
 welcomeTick DWORD 0
+invaderImgTick DWORD 0
                                                            
 .code
 showWelcomeScreen PROC USES ecx
@@ -100,8 +110,19 @@ showWelcomeScreen PROC USES ecx
   INVOKE setPos, ADDR pos, 3, 8
   INVOKE print2D, ADDR invadersText, invadersTextSize, pos
 
-  INVOKE setPos, ADDR pos, 22, 17
-  INVOKE print2D, ADDR cannonText, cannonTextSize, pos
+  INVOKE setPos, ADDR pos, 14, 17
+  INVOKE print2D, ADDR cannonImg, cannonImgSize, pos
+
+  INVOKE setPos, ADDR pos, 32, 17
+  .IF invaderImgTick > 2 
+    INVOKE print2D, ADDR invaderImg_2, invaderImgSize, pos
+  .ELSE
+    INVOKE print2D, ADDR invaderImg_1, invaderImgSize, pos
+  .ENDIF
+  inc invaderImgTick
+  .IF invaderImgTick == 5
+    mov invaderImgTick, 0
+  .ENDIF
 
   .IF startTextStatus == 1
     INVOKE setPos, ADDR pos, 4, 21
