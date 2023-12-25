@@ -93,6 +93,11 @@ Start:
     .IF ax == ESC_KEY
       .BREAK
     .ENDIF
+    .IF ax == ENTER_KEY || ax == SPACE_KEY
+      mov gameStatus, 1
+      call Clrscr
+      jmp Start
+    .ENDIF
   .ENDW
   exit
 main ENDP
